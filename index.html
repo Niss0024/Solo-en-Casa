@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solo en Casa - Terror Psicológico</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .container-wide {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ff0000;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #cc0000;
+        }
+
+        /* Particles Background */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(10px, -10px); }
+            50% { transform: translate(-10px, 10px); }
+            75% { transform: translate(10px, 10px); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff0000, #8b0000);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #ff0000;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #ff0000, #8b0000);
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .cta-button:hover {
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 50%, #0a0a0a 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.8) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.2), rgba(0, 0, 0, 0.8));
+            border-radius: 20px;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDEwIDAgTCAwIDAgMCAxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIiBzdHJva2Utd2lkdGg9IjAuNSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JpZCkiIC8+PC9zdmc+');
+            opacity: 0.3;
+        }
+
+        .hero-image-icon {
+            font-size: 6rem;
+            z-index: 1;
+            transition: transform 0.5s ease;
+        }
+
+        .hero-image:hover .hero-image-icon {
+            transform: scale(1.1);
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: white;
+            text-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+            letter-spacing: -2px;
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% {
+                text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            }
+            92% {
+                text-shadow: 3px 0 0 #ff0000, -3px 0 0 #00ffff;
+            }
+            94% {
+                text-shadow: -3px 0 0 #ff0000, 3px 0 0 #00ffff;
+            }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: #b0b0b0;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .hero-tagline {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: #ff4444;
+            margin-bottom: 2rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .hero-badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .badge {
+            padding: 0.6rem 1.2rem;
+            background: rgba(139, 0, 0, 0.3);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            border-radius: 30px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #ff0000, #8b0000);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.7);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: rgba(50, 50, 50, 0.5);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border: 1px solid rgba(100, 100, 100, 0.8);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(70, 70, 70, 0.6);
+            border-color: rgba(255, 0, 0, 0.8);
+            transform: translateY(-3px);
+        }
+
+        .scroll-indicator {
+            margin-top: 3rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        .scroll-indicator svg {
+            width: 30px;
+            height: 30px;
+            color: #ff0000;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .section-alt {
+            background: linear-gradient(180deg, #000 0%, #1a0a0a 50%, #000 100%);
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            text-align: center;
+            margin-bottom: 1rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff0000, #8b0000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-description {
+            text-align: center;
+            color: #888;
+            font-size: 1.1rem;
+            margin-bottom: 4rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Grid System */
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        /* Card Styles */
+        .card {
+            background: rgba(20, 20, 30, 0.6);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 0, 0, 0.5);
+            box-shadow: 0 20px 40px rgba(255, 0, 0, 0.2);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ff4444;
+            font-weight: 700;
+        }
+
+        .card-text {
+            color: #b0b0b0;
+            line-height: 1.8;
+        }
+
+        /* Description Box */
+        .description-box {
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.1), rgba(0, 0, 0, 0.8));
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .description-box p {
+            font-size: 1.2rem;
+            color: #ccc;
+            line-height: 1.8;
+        }
+
+        .highlight {
+            color: #ff4444;
+            font-weight: 600;
+        }
+
+        /* Level Sections */
+        .level-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .level-container:nth-child(even) {
+            direction: rtl;
+        }
+
+        .level-container:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .level-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(139, 0, 0, 0.3);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .level-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #ff4444;
+            font-weight: 900;
+        }
+
+        .level-text {
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .level-quote {
+            color: #ff4444;
+            font-style: italic;
+            font-size: 1rem;
+            border-left: 3px solid #ff0000;
+            padding-left: 1rem;
+            margin-top: 1rem;
+        }
+
+        .level-image {
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, rgba(100, 100, 100, 0.2), rgba(0, 0, 0, 0.8));
+            border-radius: 15px;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .level-image-icon {
+            font-size: 5rem;
+            transition: transform 0.5s ease;
+        }
+
+        .level-image:hover .level-image-icon {
+            transform: scale(1.2);
+        }
+
+        /* Mechanics Grid */
+        .mechanic-item {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(20, 20, 30, 0.4);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .mechanic-item:hover {
+            transform: scale(1.05);
+            border-color: rgba(255, 0, 0, 0.5);
+        }
+
+        .mechanic-key {
+            display: inline-block;
+            background: rgba(139, 0, 0, 0.3);
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            border: 2px solid rgba(255, 0, 0, 0.5);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .mechanic-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .mechanic-desc {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* Controls & UI Grid */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .controls-box {
+            background: rgba(10, 10, 10, 0.7);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+        }
+
+        .controls-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .control-key {
+            min-width: 80px;
+            padding: 0.5rem 1rem;
+            background: rgba(139, 0, 0, 0.3);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .ui-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .ui-icon {
+            font-size: 2rem;
+        }
+
+        .ui-info {
+            flex: 1;
+        }
+
+        .ui-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .ui-desc {
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        /* Screenshot */
+        .screenshot {
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #1a1a1a, #000);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: 3rem;
+        }
+
+        .screenshot::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZDIiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAyMCAwIEwgMCAwIDAgMjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIwLjUiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSJ1cmwoI2dyaWQyKSIgLz48L3N2Zz4=');
+            opacity: 0.5;
+        }
+
+        .screenshot-icon {
+            font-size: 5rem;
+            z-index: 1;
+        }
+
+        .control-overlay {
+            position: absolute;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-family: 'Orbitron', sans-serif;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #1a1a1a, #000);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            border-color: rgba(255, 0, 0, 0.6);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+        }
+
+        .gallery-item-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .gallery-icon {
+            font-size: 4rem;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-icon {
+            transform: scale(1.2);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            transition: background 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            font-size: 0.8rem;
+            color: #888;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-caption {
+            opacity: 1;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .lightbox-image {
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #1a1a1a, #000);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 0, 0, 0.5);
+        }
+
+        .lightbox-info {
+            background: rgba(50, 50, 50, 0.5);
+            padding: 1.5rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .lightbox-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 3rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            z-index: 10;
+        }
+
+        .lightbox-close:hover {
+            color: #ff0000;
+        }
+
+        .lightbox-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+
+        .lightbox-nav button {
+            padding: 0.8rem 1.5rem;
+            background: rgba(139, 0, 0, 0.3);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-nav button:hover {
+            background: rgba(139, 0, 0, 0.5);
+        }
+
+        /* Trailer Section */
+        .trailer-container:hover .trailer-icon {
+            transform: scale(1.2);
+        }
+
+        .trailer-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: #ccc;
+        }
+
+        .trailer-subtext {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .trailer-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #ff4444;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        .download-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(50, 50, 50, 0.5);
+            border: 1px solid rgba(100, 100, 100, 0.8);
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .download-link:hover {
+            background: rgba(70, 70, 70, 0.6);
+            border-color: rgba(255, 0, 0, 0.8);
+        }
+
+        /* Download Section */
+        .download-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .download-card {
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.2), rgba(0, 0, 0, 0.8));
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .download-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 0, 0, 0.3);
+        }
+
+        .download-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .download-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .download-desc {
+            color: #888;
+            margin-bottom: 1.5rem;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #ff0000, #8b0000);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.5);
+        }
+
+        .download-btn-secondary {
+            background: rgba(50, 50, 50, 0.8);
+            border: 1px solid rgba(100, 100, 100, 0.8);
+        }
+
+        .download-btn-secondary:hover {
+            background: rgba(70, 70, 70, 0.9);
+            border-color: rgba(255, 0, 0, 0.8);
+        }
+
+        .download-note {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 1rem;
+        }
+
+        /* System Requirements */
+        .requirements-box {
+            background: rgba(10, 10, 10, 0.7);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .requirements-box h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .requirements-column h4 {
+            color: #ff4444;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .requirements-column ul {
+            list-style: none;
+        }
+
+        .requirements-column li {
+            color: #ccc;
+            margin-bottom: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .requirements-column strong {
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Community Cards */
+        .community-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .community-card {
+            background: rgba(10, 10, 10, 0.5);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .community-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .community-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .community-desc {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .community-link {
+            color: #ff4444;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .community-link:hover {
+            color: #ff0000;
+        }
+
+        /* Footer */
+        footer {
+            background: #000;
+            border-top: 1px solid rgba(255, 0, 0, 0.3);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff0000, #8b0000);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .footer-brand-text {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.2rem;
+        }
+
+        .footer-desc {
+            color: #888;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .footer-section h4 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #ff4444;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 0, 0, 0.3);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-social a {
+            color: #888;
+            font-size: 1.8rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .footer-social a:hover {
+            color: #ff4444;
+            transform: scale(1.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .mobile-menu.active {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem 0;
+            }
+
+            .mobile-menu a {
+                color: #ccc;
+                text-decoration: none;
+                padding: 0.5rem 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container, .container-wide {
+                padding: 0 1rem;
+            }
+
+            section {
+                padding: 4rem 0;
+            }
+
+            .hero {
+                padding: 6rem 1rem 3rem;
+            }
+
+            .level-container {
+                grid-template-columns: 1fr;
+            }
+
+            .level-container:nth-child(even) {
+                direction: ltr;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .trailer-stats {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Utility Classes */
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-1 { margin-bottom: 1rem; }
+        .mb-2 { margin-bottom: 2rem; }
+        .mb-3 { margin-bottom: 3rem; }
+        .mt-3 { margin-top: 3rem; }
+    </style>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div id="particles"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#inicio" class="logo">
+                <div class="logo-icon">🏠</div>
+                <span class="logo-text">SOLO EN CASA</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#acerca">Acerca</a></li>
+                <li><a href="#historia">Historia</a></li>
+                <li><a href="#gameplay">Gameplay</a></li>
+                <li><a href="#galeria">Galería</a></li>
+                <li><a href="#trailer">Trailer</a></li>
+                <li><a href="https://denis240.itch.io/solo-en-casa" class="cta-button">¡Jugar Ahora!</a></li>
+            </ul>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </div>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#inicio">Inicio</a>
+            <a href="#acerca">Acerca</a>
+            <a href="#historia">Historia</a>
+            <a href="#gameplay">Gameplay</a>
+            <a href="#galeria">Galería</a>
+            <a href="#trailer">Trailer</a>
+            <a href="https://denis240.itch.io/solo-en-casa" class="cta-button" style="text-align: center; margin-top: 0.5rem;">¡Jugar Ahora!</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+
+            <h1>SOLO EN CASA</h1>
+            <p class="hero-subtitle">La oscuridad no solo apaga las luces...</p>
+            <p class="hero-tagline">También enciende tus miedos más profundos</p>
+
+            <div class="hero-badges">
+                <span class="badge">🎮 Terror Psicológico</span>
+                <span class="badge">🕹️ Godot 4.4</span>
+                <span class="badge">💻 PC Windows</span>
+                <span class="badge">🎨 Low-Poly</span>
+            </div>
+
+            <div class="hero-cta">
+                <a href="https://denis240.itch.io/solo-en-casa" class="btn-primary">
+                    <span>🎮</span>
+                    <span>Jugar Ahora</span>
+                    <span>→</span>
+                </a>
+                <a href="#trailer" class="btn-secondary">
+                    <span>▶️</span>
+                    <span>Ver Trailer</span>
+                </a>
+            </div>
+
+            <div class="scroll-indicator">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Acerca Section -->
+    <section id="acerca">
+        <div class="container">
+            <h2 class="section-title">Sobre el Juego</h2>
+            <p class="section-description">
+                Una experiencia de terror psicológico que te hará cuestionar cada sombra, cada sonido, cada rincón de tu propia casa.
+            </p>
+
+            <div class="description-box">
+                <p>
+                    <span class="highlight">Solo en Casa</span> es un videojuego de terror y suspenso donde encarnas a un niño que debe cumplir tareas simples mientras sus padres están ausentes. Lo que comienza como una noche tranquila se transforma en una experiencia inquietante cuando sucesos inexplicables alteran la calma del hogar. <span class="highlight">Cada rincón esconde algo más</span>, y lo que parecía normal empieza a distorsionarse con cada nivel.
+                </p>
+            </div>
+
+            <div class="grid grid-3">
+                <div class="card">
+                    <span class="card-icon">🎯</span>
+                    <h3 class="card-title">Mecánicas Inmersivas</h3>
+                    <p class="card-text">
+                        Sistema de interacción fluido con objetos del hogar, exploración libre y puzzles ambientales que revelan la historia.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">🌑</span>
+                    <h3 class="card-title">Atmósfera Opresiva</h3>
+                    <p class="card-text">
+                        Diseño sonoro envolvente, iluminación dinámica y efectos visuales que crean una sensación constante de paranoia.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">⏱️</span>
+                    <h3 class="card-title">Demo Intensa</h3>
+                    <p class="card-text">
+                        Experimenta 30-45 minutos de terror psicológico a través de 3 niveles que escalan en intensidad y perturbación.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Historia Section -->
+    <section id="historia" class="section-alt">
+        <div class="container-wide">
+            <h2 class="section-title">Los Tres Niveles</h2>
+            <p class="section-description">Un viaje descendente hacia la pesadilla</p>
+
+            <div class="level-container">
+                <div>
+                    <span class="level-badge">NIVEL 1</span>
+                    <h3 class="level-title">La Rutina</h3>
+                    <p class="level-text">
+                        Todo comienza de manera normal. Debes sacar la basura y dar de comer a los perros. 
+                        La casa parece tranquila, pero pequeños detalles están fuera de lugar: luces que parpadean, 
+                        sonidos distantes, sombras que parecen moverse cuando no las estás mirando.
+                    </p>
+                    <p class="level-quote">
+                        "Las luces parpadean. Las sombras se mueven. La normalidad comienza a resquebrajarse."
+                    </p>
+                </div>
+            </div>
+
+            <div class="level-container">
+
+                <div>
+                    <span class="level-badge">NIVEL 2</span>
+                    <h3 class="level-title">El Apagón</h3>
+                    <p class="level-text">
+                        La electricidad se corta. La oscuridad lo envuelve todo. Debes encontrar un 
+                        destornillador y cables para reparar la corriente, pero mientras exploras a ciegas, 
+                        los sonidos se intensifican: pasos que no son tuyos, respiraciones cercanas, susurros 
+                        ininteligibles.
+                    </p>
+                    <p class="level-quote">
+                        "En la oscuridad, los pasos no son tuyos. Las respiraciones no son tuyas. Los susurros... tampoco."
+                    </p>
+                </div>
+            </div>
+
+            <div class="level-container">
+                <div>
+                    <span class="level-badge">NIVEL 3</span>
+                    <h3 class="level-title">El Laberinto</h3>
+                    <p class="level-text">
+                        Sin transición, despiertas en un laberinto donde la lógica espacial de tu casa ha 
+                        desaparecido por completo. Un ente oscuro te persigue incansablemente. Debes escapar 
+                        antes de ser atrapado, o el juego termina abruptamente. Este nivel representa la 
+                        manifestación física del terror psicológico: tus miedos cobran forma.
+                    </p>
+                    <p class="level-quote">
+                        "Tus miedos han cobrado forma. El terror psicológico se vuelve físico. Escapa... o muere."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gameplay Section -->
+    <section id="gameplay">
+        <div class="container-wide">
+            <h2 class="section-title">Gameplay</h2>
+            <p class="section-description">Mecánicas, controles y sistema de juego</p>
+
+            <div class="description-box">
+                <h3 style="font-size: 1.8rem; margin-bottom: 1.5rem; text-align: center;">Loop de Juego</h3>
+                <div class="grid grid-3">
+                    <div class="text-center">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
+                        <h4 style="margin-bottom: 0.5rem;">1. Exploración</h4>
+                        <p style="color: #888; font-size: 0.95rem;">Navega por la casa, descubre pistas y objetos interactuables</p>
+                    </div>
+                    <div class="text-center">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+                        <h4 style="margin-bottom: 0.5rem;">2. Resolución</h4>
+                        <p style="color: #888; font-size: 0.95rem;">Completa tareas y puzzles mientras evitas la amenaza</p>
+                    </div>
+                    <div class="text-center">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🏃</div>
+                        <h4 style="margin-bottom: 0.5rem;">3. Supervivencia</h4>
+                        <p style="color: #888; font-size: 0.95rem;">Escapa del ente y avanza al siguiente nivel</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-grid">
+                <div class="controls-box">
+                    <h3>Controles</h3>
+                    <div class="control-item">
+                        <div class="control-key">WASD</div>
+                        <span>Movimiento</span>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">ESPACIO</div>
+                        <span>Saltar</span>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">E</div>
+                        <span>Interactuar / Recoger</span>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">ESC</div>
+                        <span>Pausar / Menú</span>
+                    </div>
+                </div>
+
+                <div class="controls-box">
+                    <h3>Elementos de UI</h3>
+                    <div class="ui-item">
+                        <div class="ui-icon">❤️</div>
+                        <div class="ui-info">
+                            <div class="ui-title">Salud Mental</div>
+                            <div class="ui-desc">Se deteriora con eventos de terror</div>
+                        </div>
+                    </div>
+                    <div class="ui-item">
+                        <div class="ui-icon">🔦</div>
+                        <div class="ui-info">
+                            <div class="ui-title">Repara la luz (Nivel 2)</div>
+                            <div class="ui-desc">Recoge las herramientas y cables para reparar la corriente</div>
+                        </div>
+                    </div> 
+                    <div class="ui-item">
+                        <div class="ui-icon">🎒</div>
+                        <div class="ui-info">
+                            <div class="ui-title">Inventario</div>
+                            <div class="ui-desc">Objetos clave para completar tareas</div>
+                        </div>
+                    </div>
+                    <div class="ui-item">
+                        <div class="ui-icon">📋</div>
+                        <div class="ui-info">
+                            <div class="ui-title">Lista de Tareas</div>
+                            <div class="ui-desc">Objetivos del nivel actual</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+<!-- Galería Section -->
+<section id="galeria" class="section-alt">
+    <div class="container-wide">
+        <h2 class="section-title">Galería</h2>
+        <p class="section-description">Capturas del juego en acción</p>
+
+        <div class="gallery-grid">
+            <div class="gallery-item" onclick="openLightbox(0)">
+                <div class="gallery-item-content">
+                    <img src="casa.png" alt="Nivel 1 - La Casa" class="gallery-image">
+                    <div class="gallery-overlay"></div>
+                    <div class="gallery-caption">Nivel 1 - La Casa</div>
+                </div>
+            </div>
+
+            <div class="gallery-item" onclick="openLightbox(1)">
+                <div class="gallery-item-content">
+                    <img src="pasillo.png" alt="Nivel 1 - Pasillo" class="gallery-image">
+                    <div class="gallery-overlay"></div>
+                    <div class="gallery-caption">Nivel 1 - Pasillo</div>
+                </div>
+            </div>
+
+            <div class="gallery-item" onclick="openLightbox(2)">
+                <div class="gallery-item-content">
+                    <img src="jugabilidad.png" alt="Nivel 2 - Reparaciones" class="gallery-image">
+                    <div class="gallery-overlay"></div>
+                    <div class="gallery-caption">Nivel 2 - Reparaciones</div>
+                </div>
+            </div>
+
+            <div class="gallery-item" onclick="openLightbox(3)">
+                <div class="gallery-item-content">
+                    <img src="laberinto.png" alt="Nivel 3 - Laberinto" class="gallery-image">
+                    <div class="gallery-overlay"></div>
+                    <div class="gallery-caption">Nivel 3 - Laberinto</div>
+                </div>
+            </div>
+
+            <div class="gallery-item" onclick="openLightbox(4)">
+                <div class="gallery-item-content">
+                    <img src="ente.png" alt="Nivel 3 - El Ente" class="gallery-image">
+                    <div class="gallery-overlay"></div>
+                    <div class="gallery-caption">Nivel 3 - El Ente</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close" onclick="closeLightbox()">×</button>
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <div id="lightboxImage" class="lightbox-image">🖼️</div>
+            <div class="lightbox-info">
+                <h3 id="lightboxTitle" class="lightbox-title">Título de la imagen</h3>
+                <div class="lightbox-meta">
+                    <span id="lightboxLevel">Nivel X</span>
+                    <span>•</span>
+                    <span id="lightboxResolution">1920x1080</span>
+                    <span>•</span>
+                    <span id="lightboxCaption">Descripción</span>
+                </div>
+            </div>
+            <div class="lightbox-nav">
+                <button onclick="previousImage(event)">← Anterior</button>
+                <button onclick="nextImage(event)">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trailer Section -->
+    <section id="trailer">
+        <div class="container">
+            <h2 class="section-title">Trailer Oficial</h2>
+            <p class="section-description">Sumérgete en el terror antes de jugar</p>
+
+            <div class="trailer-container" id="trailerContainer" onclick="playTrailer()">
+                <div class="trailer-icon">▶️</div>
+                <p class="trailer-text">Click para reproducir el trailer</p>
+                <p class="trailer-subtext">(YouTube/Vimeo embed aquí)</p>
+            </div>
+
+
+            <div class="trailer-stats">
+                <div>
+                    <div class="stat-number">2:15</div>
+                    <div class="stat-label">Duración</div>
+                </div>
+                <div>
+                    <div class="stat-number">1080p</div>
+                    <div class="stat-label">Calidad</div>
+                </div>
+                <div>
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Gameplay Real</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Descargar Section -->
+    <section id="descargar" class="section-alt">
+        <div class="container-wide">
+            <h2 class="section-title">Descarga la Demo</h2>
+            <p class="section-description">¿Te atreves a quedarte solo en casa?</p>
+
+            <div class="download-cards">
+                <div class="download-card">
+                    <div class="download-icon">🎮</div>
+                    <h3 class="download-title">Jugar en Itch.io</h3>
+                    <p class="download-desc">Descarga gratis la versión completa de la demo</p>
+                    <a href="https://denis240.itch.io/solo-en-casa" class="download-btn">Descargar Ahora</a>
+                    <p class="download-note">Windows 10/11 • 64-bit</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p class="text-center">&copy; 2025 Solo en Casa. Todos los derechos reservados</p>
+        </div>
+    </footer>
+</html>
